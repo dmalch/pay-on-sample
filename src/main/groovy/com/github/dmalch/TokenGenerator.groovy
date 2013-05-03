@@ -41,33 +41,24 @@ class TokenGenerator {
         def connection = url.openConnection()
 
         connection.setRequestMethod("POST")
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-        connection.setInstanceFollowRedirects(false);
-        connection.setUseCaches (false);
         connection.doInput = true
         connection.doOutput = true
 
         String parameters =
             "ACCOUNT.BRAND=VISA" +
-                    "&ACCOUNT.NUMBER=4200 0000 0000 0000" +
-                    "&ACCOUNT.EXPIRY_MONTH=6" +
-                    "&ACCOUNT.EXPIRY_YEAR=2016" +
+                    "&ACCOUNT.NUMBER=4200000000000000" +
+                    "&ACCOUNT.EXPIRY_MONTH=7" +
+                    "&ACCOUNT.EXPIRY_YEAR=2018" +
                     "&ACCOUNT.HOLDER=Dmitry Malchikov" +
-                    "&ACCOUNT.VERIFICATION=000" +
+                    "&ACCOUNT.VERIFICATION=333" +
                     "&PAYMENT.METHOD=CC" +
-                    "&FRONTEND.RESPONSE_URL=https://test.ctpe.net/frontend/Integrationguide/COPYandPAY_Thanks.html" +
-                    "&FRONTEND.FRONTEND.VERSION=2" +
-                    "&FRONTEND.MODE=ASYNC"
-        connection.setRequestProperty("Content-Length", "" + Integer.toString(parameters.getBytes().length));
+                    "&FRONTEND.RESPONSE_URL=https%3A%2F%2Ftest.ctpe.net%2Ffrontend%2FIntegrationguide%2FCOPYandPAY_Thanks.html" +
+                    "&FRONTEND.VERSION=2&FRONTEND.MODE=ASYNC"
 
         connection.outputStream << parameters
 
         def text = connection.inputStream.text
 
         println text
-
-//        def json = new JsonSlurper().parseText(text)
-//
-//        json.transaction.token
     }
 }
