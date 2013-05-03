@@ -9,7 +9,6 @@ class CopyAndPay {
         def connection = url.openConnection()
 
         connection.setRequestMethod("POST")
-        connection.doInput = true
         connection.doOutput = true
 
         String parameters = "SECURITY.SENDER=696a8f0fabffea91517d0eb0a0bf9c33" +
@@ -23,11 +22,7 @@ class CopyAndPay {
 
         connection.outputStream << parameters
 
-        def text = connection.inputStream.text
-
-        println text
-
-        def json = new JsonSlurper().parseText(text)
+        def json = new JsonSlurper().parseText(connection.inputStream.text)
 
         json.transaction.token
     }
@@ -35,13 +30,10 @@ class CopyAndPay {
     void executePayment(final String token) {
         def address = "https://test.ctpe.net/frontend/ExecutePayment;jsessionid=${token}"
 
-        println address
-
         def url = address.toURL()
         def connection = url.openConnection()
 
         connection.setRequestMethod("POST")
-        connection.doInput = true
         connection.doOutput = true
 
         String parameters =
@@ -58,14 +50,10 @@ class CopyAndPay {
         connection.outputStream << parameters
 
         def text = connection.inputStream.text
-
-        println text
     }
 
     Boolean getStatus(final String token) {
         def address = "https://test.ctpe.net/frontend/GetStatus;jsessionid=${token}"
-
-        println address
 
         def url = address.toURL()
         def connection = url.openConnection()
@@ -73,11 +61,7 @@ class CopyAndPay {
         connection.setRequestMethod("POST")
         connection.doOutput = true
 
-        def text = connection.inputStream.text
-
-        println text
-
-        def json = new JsonSlurper().parseText(text)
+        def json = new JsonSlurper().parseText(connection.inputStream.text)
 
         json.transaction.processing.result == "ACK"
     }

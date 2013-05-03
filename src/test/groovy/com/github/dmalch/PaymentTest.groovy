@@ -12,6 +12,8 @@ class PaymentTest {
 
         def token = generator.generateToken()
 
+        println "token: ${token}"
+
         generator.executePayment(token)
 
         def status = generator.getStatus(token)
