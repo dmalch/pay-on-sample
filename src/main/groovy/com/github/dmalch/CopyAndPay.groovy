@@ -4,7 +4,7 @@ import groovy.json.JsonSlurper
 
 public class CopyAndPay {
 
-    public static String generateToken() {
+    public static String generateToken(final Double amount, final String currency) {
         def url = "https://test.ctpe.net/frontend/GenerateToken".toURL()
         def connection = url.openConnection()
 
@@ -17,8 +17,8 @@ public class CopyAndPay {
                 "&USER.LOGIN=1143238d620a572a726fe92eede0d1ab" +
                 "&USER.PWD=demo" +
                 "&PAYMENT.TYPE=DB" +
-                "&PRESENTATION.AMOUNT=11.97" +
-                "&PRESENTATION.CURRENCY=EUR"
+                "&PRESENTATION.AMOUNT=${amount}" +
+                "&PRESENTATION.CURRENCY=${currency}"
 
         connection.outputStream << parameters
 
@@ -52,7 +52,7 @@ public class CopyAndPay {
         connection.inputStream.text
     }
 
-    public static Boolean getStatus(final String token) {
+    public static Object getStatus(final String token) {
         def address = "https://test.ctpe.net/frontend/GetStatus;jsessionid=${token}"
 
         def url = address.toURL()
@@ -63,6 +63,6 @@ public class CopyAndPay {
 
         def json = new JsonSlurper().parseText(connection.inputStream.text)
 
-        json.transaction.processing.result == "ACK"
+        json
     }
 }
