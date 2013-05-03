@@ -2,7 +2,7 @@ package com.github.dmalch
 
 import groovy.json.JsonSlurper
 
-class TokenGenerator {
+class CopyAndPay {
 
     String generateToken() {
         def url = "https://test.ctpe.net/frontend/GenerateToken".toURL()
@@ -60,5 +60,25 @@ class TokenGenerator {
         def text = connection.inputStream.text
 
         println text
+    }
+
+    Boolean getStatus(final String token) {
+        def address = "https://test.ctpe.net/frontend/GetStatus;jsessionid=${token}"
+
+        println address
+
+        def url = address.toURL()
+        def connection = url.openConnection()
+
+        connection.setRequestMethod("POST")
+        connection.doOutput = true
+
+        def text = connection.inputStream.text
+
+        println text
+
+        def json = new JsonSlurper().parseText(text)
+
+        json.transaction.processing.result == "ACK"
     }
 }
