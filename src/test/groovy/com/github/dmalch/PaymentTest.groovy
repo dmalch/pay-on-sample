@@ -14,7 +14,7 @@ class PaymentTest {
 
         println "token: ${token}"
 
-        generator.executePayment(token)
+        generator.executePayment(token, 4200000000000000, 7, 2014, "Dmitry Malchikov", 333,"https%3A%2F%2Ftest.ctpe.net%2Ffrontend%2FIntegrationguide%2FCOPYandPAY_Thanks.html")
 
         def status = generator.getStatus(token)
 

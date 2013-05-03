@@ -2,9 +2,9 @@ package com.github.dmalch
 
 import groovy.json.JsonSlurper
 
-class CopyAndPay {
+public class CopyAndPay {
 
-    String generateToken() {
+    public String generateToken() {
         def url = "https://test.ctpe.net/frontend/GenerateToken".toURL()
         def connection = url.openConnection()
 
@@ -27,7 +27,8 @@ class CopyAndPay {
         json.transaction.token
     }
 
-    void executePayment(final String token) {
+    public void executePayment(final String token, final Long accountNumber, final Integer expiryMonth, final Integer expiryYear,
+                               final String accountHolder, final Integer verificationCode, final String responseUrl) {
         def address = "https://test.ctpe.net/frontend/ExecutePayment;jsessionid=${token}"
 
         def url = address.toURL()
@@ -38,21 +39,20 @@ class CopyAndPay {
 
         String parameters =
             "ACCOUNT.BRAND=VISA" +
-                    "&ACCOUNT.NUMBER=4200000000000000" +
-                    "&ACCOUNT.EXPIRY_MONTH=7" +
-                    "&ACCOUNT.EXPIRY_YEAR=2018" +
-                    "&ACCOUNT.HOLDER=Dmitry Malchikov" +
-                    "&ACCOUNT.VERIFICATION=333" +
+                    "&ACCOUNT.NUMBER=${accountNumber}" +
+                    "&ACCOUNT.EXPIRY_MONTH=${expiryMonth}" +
+                    "&ACCOUNT.EXPIRY_YEAR=${expiryYear}" +
+                    "&ACCOUNT.HOLDER=${accountHolder}" +
+                    "&ACCOUNT.VERIFICATION=${verificationCode}" +
                     "&PAYMENT.METHOD=CC" +
-                    "&FRONTEND.RESPONSE_URL=https%3A%2F%2Ftest.ctpe.net%2Ffrontend%2FIntegrationguide%2FCOPYandPAY_Thanks.html" +
+                    "&FRONTEND.RESPONSE_URL=${responseUrl}" +
                     "&FRONTEND.VERSION=2&FRONTEND.MODE=ASYNC"
 
         connection.outputStream << parameters
-
-        def text = connection.inputStream.text
+        connection.inputStream.text
     }
 
-    Boolean getStatus(final String token) {
+    public Boolean getStatus(final String token) {
         def address = "https://test.ctpe.net/frontend/GetStatus;jsessionid=${token}"
 
         def url = address.toURL()
